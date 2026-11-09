@@ -1,0 +1,142 @@
+---
+import Base from '../../layouts/Base.astro';
+import Tex from '../../components/Tex.astro';
+import { modules } from '../../content/modules';
+import { url } from '../../lib/site';
+import SecantTangent from '../../components/islands/SecantTangent';
+import RiemannSums from '../../components/islands/RiemannSums';
+import Taylor from '../../components/islands/Taylor';
+import LinearMaps from '../../components/islands/LinearMaps';
+import RootFinding from '../../components/islands/RootFinding';
+import Foundations from '../../components/islands/Foundations';
+import PythonCell from '../../components/islands/PythonCell';
+
+export function getStaticPaths() {
+  return modules.map((m) => ({ params: { slug: m.slug } }));
+}
+const { slug } = Astro.params;
+const i = modules.findIndex((m) => m.slug === slug);
+const m = modules[i];
+const prev = modules[i - 1];
+const next = modules[i + 1];
+const minutes = (t: string) => { const [a, b] = t.split('–').map(Number); return b - a; };
+---
+<Base title={`${m.title} · Interactive Lab`} current="lab/" description={`${m.title} (${m.course}): ${m.blurb} Interactive module with learning outcomes, guided questions and teacher notes.`}>
+  <section class="graph-paper border-b border-rule">
+    <div class="container-x py-10 sm:py-14">
+      <nav aria-label="Breadcrumb" class="text-sm text-ink-3">
+        <ol class="flex flex-wrap items-center gap-2">
+          <li><a class="hover:text-accent" href={url('lab/')}>Interactive Lab</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page" class="text-ink-2">Module {m.letter}</li>
+        </ol>
+      </nav>
+      <div class="mt-6 grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-end">
+        <div>
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="grid h-12 w-12 place-items-center rounded-full bg-accent font-serif text-2xl text-accent-ink">{m.letter}</span>
+            <span class="num rounded-full border border-rule-strong bg-surface px-3 py-1 text-sm text-ink">SFU {m.course}</span>
+            <span class="text-sm text-ink-3">{m.courseNote}</span>
+          </div>
+          <h1 class="mt-5 text-[2.3rem] leading-[1.05] text-ink sm:text-[3.2rem]">{m.title}</h1>
+          <p class="mt-4 max-w-2xl text-lg text-ink-2">{m.intro}</p>
+        </div>
+        <div class="card min-w-0 p-5 text-ink">
+          <p class="kicker mb-2">Key idea</p>
+          <Tex tex={m.formula} display />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container-x">
+    <section aria-labelledby="outcomes" class="grid gap-6 py-12 md:grid-cols-[14rem_1fr]">
+      <h2 id="outcomes" class="text-2xl text-ink">Learning outcomes</h2>
+      <div>
+        <p class="text-ink-2">By the end of the activity, students can:</p>
+        <ol class="mt-4 grid gap-3 sm:grid-cols-2">
+          {m.outcomes.map((o, k) => (
+            <li class="flex gap-3 rounded-xl border border-rule bg-surface p-4">
+              <span class="num text-sm text-accent">{String(k + 1).padStart(2, '0')}</span>
+              <span class="text-[0.97rem] text-ink-2">{o}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section aria-labelledby="try" class="border-t border-rule py-12">
+      <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+        <h2 id="try" class="text-2xl text-ink">Interactive</h2>
+        <p class="text-sm text-ink-3">Keyboard: Tab to a control, then use the arrow keys. Every graph has a text description below it.</p>
+      </div>
+      {slug === 'secant-tangent' && <SecantTangent client:visible />}
+      {slug === 'riemann-sums' && <RiemannSums client:visible />}
+      {slug === 'taylor' && <Taylor client:visible />}
+      {slug === 'linear-maps' && <LinearMaps client:visible />}
+      {slug === 'root-finding' && <RootFinding client:visible />}
+      {slug === 'foundations' && <Foundations client:visible />}
+      {slug === 'root-finding' && <div class="mt-6"><PythonCell client:visible /></div>}
+    </section>
+
+    <section aria-labelledby="questions" class="grid gap-6 border-t border-rule py-12 md:grid-cols-[14rem_1fr]">
+      <h2 id="questions" class="text-2xl text-ink">Guided questions</h2>
+      <ol class="space-y-4">
+        {m.questions.map((q, k) => (
+          <li class="card p-5 sm:p-6">
+            <div class="flex gap-4">
+              <span class="font-serif text-3xl leading-none text-accent">{k + 1}</span>
+              <div class="min-w-0 flex-1">
+                <p class="text-[1.02rem] text-ink">{q.q}</p>
+                <details class="group mt-3">
+                  <summary class="cursor-pointer list-none text-sm font-medium text-accent [&::-webkit-details-marker]:hidden">
+                    <span class="group-open:hidden">Show discussion</span><span class="hidden group-open:inline">Hide discussion</span>
+                  </summary>
+                  <p class="mt-2 rounded-lg bg-sunken p-3 text-[0.95rem] text-ink-2">{q.a}</p>
+                </details>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section aria-labelledby="notes" class="border-t border-rule py-12">
+      <div class="overflow-hidden rounded-2xl border border-accent/30 bg-accent-soft/50">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-accent/20 px-5 py-4 sm:px-7">
+          <h2 id="notes" class="text-2xl text-ink">Teacher notes</h2>
+          <p class="kicker !text-accent">How I would use it · 50-minute class or workshop</p>
+        </div>
+        <div class="p-5 sm:p-7">
+          <div class="flex h-3 overflow-hidden rounded-full" aria-hidden="true">
+            {m.notes.map((n, k) => <div style={`flex:${minutes(n.t)}`} class:list={['h-full', k % 2 ? 'bg-accent/45' : 'bg-accent']} />)}
+          </div>
+          <ol class="mt-6 grid gap-4 md:grid-cols-5">
+            {m.notes.map((n) => (
+              <li class="min-w-0">
+                <p class="num text-sm font-medium text-accent">{n.t} min</p>
+                <p class="mt-1 text-[0.93rem] text-ink-2">{n.what}</p>
+              </li>
+            ))}
+          </ol>
+          <p class="mt-6 border-t border-accent/20 pt-4 text-[0.95rem] text-ink-2"><strong class="text-ink">Tip.</strong> {m.notesTip}</p>
+        </div>
+      </div>
+    </section>
+
+    <nav aria-label="Other modules" class="grid gap-3 border-t border-rule py-10 sm:grid-cols-2">
+      {prev ? (
+        <a href={url(`lab/${prev.slug}/`)} class="card p-5 no-underline hover:border-accent">
+          <span class="text-sm text-ink-3">← Previous · Module {prev.letter}</span>
+          <span class="mt-1 block font-serif text-xl text-ink">{prev.title}</span>
+        </a>
+      ) : <a href={url('lab/')} class="card p-5 no-underline hover:border-accent"><span class="text-sm text-ink-3">← Back to</span><span class="mt-1 block font-serif text-xl text-ink">All modules</span></a>}
+      {next ? (
+        <a href={url(`lab/${next.slug}/`)} class="card p-5 text-right no-underline hover:border-accent">
+          <span class="text-sm text-ink-3">Next · Module {next.letter} →</span>
+          <span class="mt-1 block font-serif text-xl text-ink">{next.title}</span>
+        </a>
+      ) : <a href={url('ai-lab/')} class="card p-5 text-right no-underline hover:border-accent"><span class="text-sm text-ink-3">Next →</span><span class="mt-1 block font-serif text-xl text-ink">AI Verification Lab</span></a>}
+    </nav>
+  </div>
+</Base>

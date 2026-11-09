@@ -1,0 +1,9 @@
+---
+import katex from 'katex';
+import 'katex/dist/katex.min.css';
+interface Props { tex: string; display?: boolean; class?: string }
+const { tex, display = false, class: cls } = Astro.props;
+// throwOnError: a typo in any formula fails the build instead of shipping broken maths.
+const html = katex.renderToString(tex, { displayMode: display, throwOnError: true, output: 'htmlAndMathml', strict: 'warn' });
+---
+{display ? <div class:list={['overflow-x-auto overflow-y-hidden', cls]} set:html={html} /> : <span class={cls} set:html={html} />}

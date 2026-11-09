@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import { person } from '../content/facts';
+import { url, availableDocs } from '../lib/site';
+
+const docs = availableDocs();
+const links = [
+  { label: 'Email', value: person.email, href: `mailto:${person.email}`, icon: 'M3 6.5h18v11H3zM3.5 7l8.5 6 8.5-6' },
+  { label: 'LinkedIn', value: 'linkedin.com/in/syeda-alishba-fatima-695711135', href: person.linkedin, icon: 'M5 9v10M5 5.2v.1M10 19v-6a3 3 0 0 1 6 0v6M10 9v10' },
+  { label: 'GitHub', value: 'github.com/AlishbaFatima12', href: person.github, icon: 'M9 19c-4 1.3-4-2-6-2.5M15 21v-3.5a3 3 0 0 0-.9-2.4c3-.3 6-1.4 6-6.5a5 5 0 0 0-1.4-3.5 4.6 4.6 0 0 0-.1-3.5s-1.1-.3-3.6 1.4a12 12 0 0 0-6.4 0C6.1 1.3 5 1.6 5 1.6a4.6 4.6 0 0 0-.1 3.5A5 5 0 0 0 3.5 8.6c0 5 3 6.2 6 6.5a3 3 0 0 0-.9 2.3V21' },
+];
+---
+<Base title="Contact" current="contact/" description="Contact Syeda Alishba Fatima by email, LinkedIn or GitHub.">
+  <section class="graph-paper border-b border-rule">
+    <div class="container-x py-14 sm:py-20">
+      <p class="kicker">Contact</p>
+      <h1 class="mt-4 max-w-3xl text-[2.6rem] leading-[1.04] text-ink sm:text-[3.6rem]">Let's talk about teaching mathematics.</h1>
+      <p class="mt-6 max-w-2xl text-lg text-ink-2">Email is the quickest way to reach me.</p>
+    </div>
+  </section>
+
+  <section class="container-x py-12" aria-label="Contact details">
+    <ul class="grid gap-4 md:grid-cols-3">
+      {links.map((l, i) => (
+        <li>
+          <a href={l.href} class:list={['card reveal group flex h-full flex-col p-6 no-underline transition-colors hover:border-accent', i === 0 && 'md:bg-accent md:text-accent-ink md:border-accent']}>
+            <svg aria-hidden="true" viewBox="0 0 24 24" class:list={['h-7 w-7', i === 0 ? 'text-accent md:text-accent-ink' : 'text-accent']} fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={l.icon} /></svg>
+            <span class:list={['mt-6 text-sm', i === 0 ? 'text-ink-3 md:text-accent-ink/80' : 'text-ink-3']}>{l.label}</span>
+            <span class:list={['mt-1 break-all font-serif text-xl', i === 0 ? 'text-ink md:text-accent-ink' : 'text-ink']}>{l.value}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    {docs.length > 0 && (
+      <div class="mt-10">
+        <p class="kicker mb-3">Documents</p>
+        <div class="flex flex-wrap gap-3">
+          {docs.map((d) => <a class="btn btn-ghost" href={url(`docs/${d.file}`)} download>{d.label} (PDF)</a>)}
+        </div>
+      </div>
+    )}
+  </section>
+</Base>

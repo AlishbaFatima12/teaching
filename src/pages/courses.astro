@@ -1,0 +1,92 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { courseGroups } from '../content/courses';
+import { modules } from '../content/modules';
+import { url, availableDocs } from '../lib/site';
+
+const docs = availableDocs();
+const mod = (slug: string) => modules.find((m) => m.slug === slug)!;
+const total = courseGroups.reduce((n, g) => n + g.courses.length, 0);
+---
+<Base title="Courses & Materials" current="courses/" description="SFU mathematics courses Syeda Alishba Fatima is prepared to teach, from FAN X99 to MACM 316, with an approach note for each and links to matching interactive modules.">
+  <section class="graph-paper border-b border-rule">
+    <div class="container-x py-14 sm:py-20">
+      <p class="kicker">Courses &amp; materials</p>
+      <h1 class="mt-4 max-w-4xl text-[2.6rem] leading-[1.04] text-ink sm:text-[3.6rem]">{total} SFU courses I am prepared to teach.</h1>
+      <p class="mt-6 max-w-2xl text-lg text-ink-2">
+        From foundational numeracy to numerical analysis. Each card gives my approach and links to the
+        interactive modules I would use. Course titles are from the SFU Academic Calendar.
+      </p>
+      <nav aria-label="Course groups" class="mt-8 flex flex-wrap gap-2">
+        {courseGroups.map((g) => <a href={`#${g.id}`} class="rounded-full border border-rule-strong bg-surface px-4 py-2 text-sm text-ink-2 no-underline hover:border-accent hover:text-accent">{g.name}</a>)}
+      </nav>
+    </div>
+  </section>
+
+  <div class="container-x">
+    {courseGroups.map((g, gi) => (
+      <section id={g.id} aria-labelledby={`${g.id}-h`} class:list={['py-12 sm:py-14', gi > 0 && 'border-t border-rule']}>
+        <SectionHead n={String(gi + 1).padStart(2, '0')} kicker={`${g.courses.length} course${g.courses.length > 1 ? 's' : ''}`} id={`${g.id}-h`} title={g.name} />
+        <ul class="grid gap-4 md:grid-cols-2">
+          {g.courses.map((c) => (
+            <li class="card reveal flex flex-col p-6">
+              <p class="num text-sm font-medium text-accent">{c.code}</p>
+              <h3 class="mt-1 text-[1.45rem] leading-snug text-ink">{c.title}</h3>
+              <p class="mt-3 text-[0.97rem] text-ink-2">{c.approach}</p>
+              {c.grounded && (
+                <p class="mt-4 flex gap-2 rounded-lg bg-sunken px-3 py-2 text-sm text-ink-2">
+                  <span aria-hidden="true" class="text-accent">◆</span><span><span class="sr-only">Experience: </span>{c.grounded}</span>
+                </p>
+              )}
+              <div class="mt-auto flex flex-wrap gap-2 pt-5">
+                {c.modules.map((s) => (
+                  <a href={url(`lab/${s}/`)} class="rounded-full border border-rule-strong px-3 py-1.5 text-xs text-ink-2 no-underline hover:border-accent hover:text-accent">
+                    Module {mod(s).letter}: {mod(s).title}
+                  </a>
+                ))}
+                {c.ai && (
+                  <a href={url('ai-lab/#items')} class="rounded-full bg-accent-soft px-3 py-1.5 text-xs text-accent no-underline hover:underline">AI Lab: {c.ai} items</a>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+
+    <section aria-labelledby="workshops-h" class="border-t border-rule py-12 sm:py-14">
+      <SectionHead n="05" kicker="Beyond lectures" id="workshops-h" title="Workshops and teaching assistants." />
+      <div class="grid gap-4 md:grid-cols-3">
+        <div class="card reveal p-6">
+          <h3 class="text-xl text-ink">Workshops</h3>
+          <p class="mt-2 text-[0.95rem] text-ink-2">Every module on this site comes with a 50-minute plan and guided questions that work as a workshop sheet: core problems for everyone, stretch problems for students who finish early.</p>
+        </div>
+        <div class="card reveal p-6">
+          <h3 class="text-xl text-ink">Supporting TAs</h3>
+          <p class="mt-2 text-[0.95rem] text-ink-2">Clear session plans, the common errors to look for, and a short debrief after each week so that what TAs see in workshops shapes the next lecture.</p>
+        </div>
+        <div class="card reveal p-6">
+          <h3 class="text-xl text-ink">Experience behind it</h3>
+          <p class="mt-2 text-[0.95rem] text-ink-2">As Assistant Director at the National Commission for Human Development, I supervise volunteer teachers in the Each One Teach One literacy program from briefing to learner assessment, and design digital training content.</p>
+        </div>
+      </div>
+    </section>
+
+    {docs.length > 0 && (
+      <section id="materials" aria-labelledby="materials-h" class="border-t border-rule py-12 sm:py-14">
+        <SectionHead n="06" kicker="Downloads" id="materials-h" title="Teaching documents." />
+        <ul class="grid gap-3 sm:grid-cols-3">
+          {docs.map((d) => (
+            <li>
+              <a href={url(`docs/${d.file}`)} download class="card flex items-center gap-4 p-5 no-underline hover:border-accent">
+                <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-accent-soft text-xs font-semibold text-accent">PDF</span>
+                <span><span class="block font-serif text-lg text-ink">{d.label}</span><span class="text-sm text-ink-3">Download</span></span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </div>
+</Base>

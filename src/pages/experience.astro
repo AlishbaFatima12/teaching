@@ -1,0 +1,90 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { roles, education, development, research, person } from '../content/facts';
+import { url, availableDocs } from '../lib/site';
+
+const cv = availableDocs().find((d) => d.file === 'cv.pdf');
+const scopus = `https://www.scopus.com/authid/detail.uri?authorId=${person.scopus}`;
+---
+<Base title="Experience" current="experience/" description="Teaching experience, education, professional development and research of Syeda Alishba Fatima: lecturer, senior mathematics teacher, numerical analysis teaching intern and teacher supervisor.">
+  <section class="graph-paper border-b border-rule">
+    <div class="container-x py-14 sm:py-20">
+      <p class="kicker">Experience</p>
+      <h1 class="mt-4 max-w-4xl text-[2.6rem] leading-[1.04] text-ink sm:text-[3.6rem]">Teaching, from secondary classrooms to university labs.</h1>
+      {cv && <a class="btn btn-primary mt-8" href={url(`docs/${cv.file}`)} download>Download CV (PDF)</a>}
+    </div>
+  </section>
+
+  <div class="container-x">
+    <section aria-labelledby="timeline-h" class="py-12 sm:py-14">
+      <SectionHead n="01" kicker="Timeline" id="timeline-h" title="Teaching and leadership." />
+      <ol class="relative ml-2 border-l-2 border-rule sm:ml-4">
+        {roles.map((r) => (
+          <li class="reveal relative pb-10 pl-7 last:pb-0 sm:pl-10">
+            <span aria-hidden="true" class:list={['absolute -left-[9px] top-1.5 h-4 w-4 rounded-full border-2 border-paper', r.end === null ? 'bg-accent' : 'bg-ink-3']}></span>
+            <p class="num text-sm text-accent">
+              {r.start ? <time datetime={r.start}>{r.dates.split(' – ')[0]}</time> : null}
+              {r.start ? ' – ' : ''}
+              {r.end ? <time datetime={r.end}>{r.dates.split(' – ')[1]}</time> : (r.start ? 'present' : r.dates)}
+            </p>
+            <h3 class="mt-1 text-[1.5rem] leading-snug text-ink">{r.title}</h3>
+            <p class="mt-0.5 text-ink-2">{r.org}</p>
+            <ul class="mt-3 max-w-3xl space-y-2">
+              {r.points.map((p) => (
+                <li class="flex gap-3 text-[0.97rem] text-ink-2"><span aria-hidden="true" class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-ink-3"></span><span>{p}</span></li>
+              ))}
+            </ul>
+            <ul class="mt-3 flex flex-wrap gap-1.5" aria-label="Topics">
+              {r.tags.map((t) => <li class="rounded-full border border-rule px-2.5 py-1 text-xs text-ink-3">{t}</li>)}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section aria-labelledby="edu-h" class="border-t border-rule py-12 sm:py-14">
+      <SectionHead n="02" kicker="Education" id="edu-h" title="Degrees." />
+      <ul class="grid gap-4 md:grid-cols-3">
+        {education.map((e) => (
+          <li class="card reveal flex flex-col p-6">
+            <p class="num text-sm text-accent">{e.year}</p>
+            <h3 class="mt-1 text-[1.35rem] leading-snug text-ink">{e.degree}</h3>
+            <p class="mt-1 text-ink-2">{e.institution}</p>
+            <p class="num mt-4 text-2xl text-ink">{e.result}</p>
+            {e.honour && <p class="mt-2 text-sm text-ink-2">{e.honour}</p>}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="pd-h" class="border-t border-rule py-12 sm:py-14">
+      <div class="grid gap-10 lg:grid-cols-2">
+        <div>
+          <SectionHead n="03" kicker="Professional development" id="pd-h" title="Training." />
+          <ul class="space-y-3">
+            {development.map((d) => (
+              <li class="card reveal flex items-start justify-between gap-4 p-5">
+                <span class="text-ink">{d.text}</span>
+                <span class="num shrink-0 text-sm text-ink-3">{d.year}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <SectionHead n="04" kicker="Research" id="res-h" title="Publications." />
+          <div class="card reveal p-6">
+            <p class="text-ink">
+              <span class="num text-3xl text-accent">{research.publications}</span>
+              <span class="ml-2">peer-reviewed applied data-analytics publications, including {research.springerChapters} Springer book chapters.</span>
+            </p>
+            <ul class="mt-5 space-y-2 text-[0.95rem]">
+              <li>Scopus Author ID: <a class="link num" href={scopus}>{person.scopus}</a></li>
+              <li>Research notes: <a class="link" href={person.notesRepo}>github.com/AlishbaFatima12/agent-reliability-notes</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</Base>

@@ -1,0 +1,176 @@
+---
+import Base from '../layouts/Base.astro';
+import Tex from '../components/Tex.astro';
+import { url } from '../lib/site';
+import { aiFinding } from '../content/facts';
+
+interface Commitment {
+  id: string;
+  n: string;
+  title: string;
+  lead: string;
+  practice: string[];
+  grounded: { text: string; fact: string }[];
+  tryIt: { href: string; label: string };
+  glyph: string;
+}
+
+const commitments: Commitment[] = [
+  {
+    id: 'gaps',
+    n: '01',
+    title: 'Find learning gaps early.',
+    lead:
+      'University mathematics usually fails quietly. A student who is unsure about fractions or function notation in week two is lost in the chain rule by week six. I look for the gap while it is still small.',
+    practice: [
+      'A short prerequisite check in the first week, built from the skills FAN X99 and MATH 100 assume.',
+      'One-minute problems at the end of a lecture, read the same day, so the next class starts where students actually are.',
+      'Workshop and TA time aimed at the errors that recur, not spread evenly across every topic.',
+      'Assessments designed to diagnose as well as to grade: each question tests one idea, so a wrong answer tells me which idea.',
+    ],
+    grounded: [
+      { text: "Designed tests and coursework for O Level and AKU-EB mathematics at The Froebel's School.", fact: 'F5' },
+      { text: 'Supervise volunteer teachers in the Each One Teach One literacy program from briefing to learner assessment.', fact: 'F8' },
+    ],
+    tryIt: { href: 'lab/foundations/', label: 'Module F: Foundations (FAN X99)' },
+    glyph: 'M6 40 H34 M42 40 H70 M78 40 H94 M38 40 m-4 0 a4 4 0 1 0 8 0 a4 4 0 1 0 -8 0',
+  },
+  {
+    id: 'stretch',
+    n: '02',
+    title: 'Support and stretch in the same room.',
+    lead:
+      'An introductory class holds students who are close to failing and students who are bored. I write tasks with a low floor and a high ceiling, so everyone starts on the same problem and nobody runs out of mathematics.',
+    practice: [
+      'Every worked example has an entry point (a numerical case) and an extension (a "what if" that generalizes it).',
+      'Interactive modules where the first question can be answered by dragging a slider and the third needs a proof.',
+      'Structured workshop sheets: core problems everyone completes, challenge problems for students who finish early.',
+      'TA guidance that names which students to check in with first and which questions to hand out next.',
+    ],
+    grounded: [
+      { text: "Supported weaker learners and stretched able students at The Froebel's School.", fact: 'F5' },
+      { text: 'Prepared students for the 14th National Inter-School Mathematics Olympiad (2018; about 14,000 participants).', fact: 'F5' },
+      { text: 'Taught FSc Pre-Engineering mathematics (Grades 11–12) to large classes.', fact: 'F4' },
+    ],
+    tryIt: { href: 'lab/taylor/', label: 'Module C: Taylor polynomials' },
+    glyph: 'M6 52 H94 M20 52 V36 M50 52 V20 M80 52 V8',
+  },
+  {
+    id: 'concrete',
+    n: '03',
+    title: 'Concrete, then computational.',
+    lead:
+      'I start with a picture or a number students can hold, then the symbols, then the computation. A Riemann sum is first a stack of rectangles, then a formula, then a loop a computer can run a million times.',
+    practice: [
+      'Each new idea opens with a case small enough to do by hand and draw.',
+      'The general symbolic statement comes second, and students can see it matches the case they just did.',
+      'Computation (a slider, a table, a few lines of Python) comes third, to test the idea at a scale no one would do by hand.',
+      'Numerical results are always compared against an exact answer when one exists, so students learn what "close" means.',
+    ],
+    grounded: [
+      { text: 'Ran MATLAB laboratory sessions for undergraduate Numerical Analysis at the University of Karachi.', fact: 'F6' },
+      { text: 'Teach Python, agentic AI and cloud-native tools to adult learners at PIAIC.', fact: 'F7' },
+      { text: 'MS Computer Science & IT, NED University of Engineering & Technology (2024).', fact: 'F3' },
+    ],
+    tryIt: { href: 'lab/riemann-sums/', label: 'Module B: Riemann sums' },
+    glyph: 'M10 54V38H26V54M26 54V26H42V54M42 54V18H58V54M58 54V14H74V54M74 54V16H90V54',
+  },
+  {
+    id: 'verify',
+    n: '04',
+    title: 'Verify, especially with AI.',
+    lead:
+      'Students already use AI to do mathematics. Banning it does not teach them anything; showing them how to check it does. I teach verification as a mathematical skill: substitute a value, test a special case, estimate the size, check the units, differentiate the antiderivative.',
+    practice: [
+      'Every AI-produced answer in class is treated as a claim to be checked, never as an authority.',
+      'A short verification checklist that students learn and use on their own and on AI work.',
+      '"Spot the AI\'s mistake" exercises in workshops, with the correction and the check that would have caught it.',
+      'Assessment that rewards the check as well as the answer.',
+    ],
+    grounded: [
+      { text: aiFinding.sentence, fact: 'F10' },
+    ],
+    tryIt: { href: 'ai-lab/', label: 'AI Verification Lab' },
+    glyph: 'M10 32 L34 54 L90 8',
+  },
+];
+---
+<Base title="Teaching Philosophy" current="philosophy/" description="Four commitments behind how Syeda Alishba Fatima teaches mathematics: find gaps early, support and stretch, concrete then computational, and verify, especially with AI.">
+  <section class="graph-paper border-b border-rule" aria-labelledby="ph-title">
+    <div class="container-x py-14 sm:py-20">
+      <p class="kicker">Teaching philosophy</p>
+      <h1 id="ph-title" class="mt-4 max-w-4xl text-[2.6rem] leading-[1.04] text-ink sm:text-[3.6rem]">Four commitments I bring to every class I teach.</h1>
+      <p class="mt-6 max-w-2xl text-lg text-ink-2">
+        These describe how I plan lectures, workshops and assessments. Each one is tied to something I have done
+        and to a resource on this site you can try.
+      </p>
+      <nav aria-label="Commitments" class="mt-10">
+        <ol class="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          {commitments.map((c) => (
+            <li>
+              <a href={`#${c.id}`} class="card flex h-full items-baseline gap-3 p-4 no-underline transition-colors hover:border-accent">
+                <span class="num text-sm text-accent">{c.n}</span>
+                <span class="font-serif text-lg leading-snug text-ink">{c.title}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </div>
+  </section>
+
+  <div class="container-x">
+    {commitments.map((c, i) => (
+      <section id={c.id} aria-labelledby={`${c.id}-h`} class:list={['grid gap-8 py-16 sm:py-20 lg:grid-cols-[14rem_1fr] lg:gap-14', i > 0 && 'border-t border-rule']}>
+        <div class="reveal lg:sticky lg:top-24 lg:self-start">
+          <p class="font-serif text-[4.5rem] leading-none text-accent sm:text-[5.5rem]">{c.n}</p>
+          <svg viewBox="0 0 100 60" class="mt-4 h-16 w-40" aria-hidden="true">
+            <path d={c.glyph} fill="none" stroke="var(--ink-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="reveal min-w-0">
+          <h2 id={`${c.id}-h`} class="text-[2rem] leading-tight text-ink sm:text-[2.5rem]">{c.title}</h2>
+          <p class="mt-5 max-w-3xl font-serif text-[1.3rem] leading-relaxed text-ink-2">{c.lead}</p>
+
+          {c.id === 'concrete' && (
+            <div class="mt-6 max-w-3xl rounded-xl border border-rule bg-surface p-4 text-ink-2">
+              <Tex tex={String.raw`\underbrace{\textstyle\sum_{i=1}^{n} f(x_i^{*})\,\Delta x}_{\text{rectangles}} \;\longrightarrow\; \underbrace{\int_a^b f(x)\,dx}_{\text{symbol}} \;=\; \underbrace{F(b)-F(a)}_{\text{computation}}`} display />
+            </div>
+          )}
+
+          <div class="mt-9 grid gap-6 md:grid-cols-2">
+            <div class="card p-6">
+              <h3 class="kicker !text-ink-2">In practice</h3>
+              <ul class="mt-4 space-y-3">
+                {c.practice.map((p) => (
+                  <li class="flex gap-3 text-[0.98rem] text-ink-2">
+                    <span aria-hidden="true" class="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"></span>
+                    <span>{p}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div class="flex flex-col gap-6">
+              <div class="rounded-2xl border border-rule bg-sunken/60 p-6">
+                <h3 class="kicker !text-ink-2">Grounded in</h3>
+                <ul class="mt-4 space-y-3">
+                  {c.grounded.map((g) => (
+                    <li class="text-[0.95rem] text-ink-2">{g.text}</li>
+                  ))}
+                </ul>
+                <a class="link mt-4 inline-block text-sm" href={url('experience/')}>Full experience timeline →</a>
+              </div>
+              <a href={url(c.tryIt.href)} class="group flex items-center justify-between gap-4 rounded-2xl bg-accent px-6 py-5 text-accent-ink no-underline transition hover:brightness-110">
+                <span>
+                  <span class="block text-xs uppercase tracking-[0.14em] opacity-80">Try it</span>
+                  <span class="mt-1 block font-serif text-xl">{c.tryIt.label}</span>
+                </span>
+                <svg aria-hidden="true" viewBox="0 0 16 16" class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    ))}
+  </div>
+</Base>

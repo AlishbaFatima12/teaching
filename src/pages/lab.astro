@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import ModuleCard from '../components/ModuleCard.astro';
+import { modules } from '../content/modules';
+
+const anatomy = [
+  { k: 'Outcomes', v: 'What students can do afterwards, written so I can assess it.' },
+  { k: 'SFU course', v: 'Where the module fits: FAN X99 through MACM 316.' },
+  { k: 'Interactive', v: 'Keyboard-operable, with a live text description of every graph.' },
+  { k: '3 questions', v: 'From "drag and notice" to "explain why", each with a discussion note.' },
+  { k: 'Teacher notes', v: 'A minute-by-minute plan for a 50-minute class or TA workshop.' },
+  { k: 'Reset', v: 'One click back to the starting state, for projecting in class.' },
+];
+---
+<Base title="Interactive Lab" current="lab/" description="Six interactive mathematics modules for university courses: derivatives, Riemann sums, Taylor polynomials, linear maps, root-finding and foundations, each with outcomes, guided questions and teacher notes.">
+  <section class="graph-paper border-b border-rule">
+    <div class="container-x py-14 sm:py-20">
+      <p class="kicker">Interactive Lab</p>
+      <h1 class="mt-4 max-w-4xl text-[2.6rem] leading-[1.04] text-ink sm:text-[3.6rem]">Six modules for learning by moving the mathematics.</h1>
+      <p class="mt-6 max-w-2xl text-lg text-ink-2">
+        Each module is built for one lesson: students make a prediction, move something, and explain what they see.
+        Every numerical routine behind these graphs is unit-tested against exact answers.
+      </p>
+    </div>
+  </section>
+
+  <section aria-labelledby="anatomy" class="border-b border-rule bg-sunken/40">
+    <div class="container-x py-10">
+      <h2 id="anatomy" class="kicker mb-5">Every module has</h2>
+      <ul class="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-rule bg-rule md:grid-cols-3 lg:grid-cols-6">
+        {anatomy.map((a) => (
+          <li class="bg-surface p-4">
+            <p class="font-serif text-lg text-ink">{a.k}</p>
+            <p class="mt-1 text-sm text-ink-2">{a.v}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section aria-label="Modules" class="container-x py-14">
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {modules.map((m, i) => <li><ModuleCard m={m} delay={(i % 3) * 70} /></li>)}
+    </ul>
+  </section>
+</Base>

@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+test-results/
+playwright-report/
+.lighthouseci/
+.env
+screenshots/stage1/
+screenshots/stage2/
+reports/playwright/
+reports/lighthouse/*.json
